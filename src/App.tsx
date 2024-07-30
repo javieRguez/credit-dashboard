@@ -1,7 +1,9 @@
+import { Dashboard } from "./pages";
+
 const App = () => {
   return (
     <>
-      <h1>Hello World</h1>
+      <Dashboard />
     </>
   );
 };
