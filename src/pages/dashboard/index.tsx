@@ -2,10 +2,11 @@ import { Col, Row, Button } from "reactstrap";
 import {
   CardComponent,
   InputFileComponent,
+  PaginationComponent,
   TableComponent,
 } from "../../components";
 import ModalComponent from "../../components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { read, utils } from "xlsx";
 import {
   Client,
@@ -13,11 +14,27 @@ import {
   dataMapping,
   headsWidthKeys,
 } from "./dashboard.config";
+import {
+  getPaginate,
+  PagedData,
+  nextPage,
+  prevPage,
+} from "../../helpers/paginated";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [page, setPage] = useState(1);
   const [clients, setClients] = useState<Client[]>([]);
+  const [pagedData, setPagedData] = useState<PagedData<Client>>({
+    data: [],
+    totalPages: 10,
+  });
 
+  useEffect(() => {
+    if (pagedData.data.length > 0) {
+      createPagination(clients);
+    }
+  }, [page]);
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -37,10 +54,26 @@ const Dashboard = () => {
           utils.sheet_to_json<DataExcel>(worksheet);
         const formattedData = dataMapping(dataExcel);
         setClients(formattedData);
+        createPagination(formattedData);
+        toggleModal();
       }
     };
     reader.readAsArrayBuffer(file);
   };
+  const createPagination = (clients: Client[]) => {
+    const paginate = getPaginate(clients, page, 10);
+    setPagedData(paginate);
+  };
+
+  const changeToNextPage = () => {
+    const numberPagedData = nextPage(clients, page, 10);
+    setPagedData(numberPagedData);
+  };
+  const changeToPrevPage = () => {
+    const numberPagedData = prevPage(clients, page, 10);
+    setPagedData(numberPagedData);
+  };
+
   return (
     <div className=" m-5">
       <ModalComponent
@@ -67,7 +100,17 @@ const Dashboard = () => {
           <CardComponent title="Saldo Actual" amount={10000} />
         </Col>
       </Row>
-      <TableComponent headsWidthKeys={headsWidthKeys} data={clients} />
+      <TableComponent headsWidthKeys={headsWidthKeys} data={pagedData.data} />
+      {pagedData.data.length > 0 && (
+        <PaginationComponent
+          page={page}
+          totalPages={pagedData.totalPages}
+          setPage={setPage}
+          size="sm"
+          changeToNextPage={changeToNextPage}
+          changeToPrevPage={changeToPrevPage}
+        />
+      )}
     </div>
   );
 };

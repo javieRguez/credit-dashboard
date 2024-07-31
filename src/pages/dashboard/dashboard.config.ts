@@ -10,7 +10,7 @@ export interface DataExcel {
     DELEGACION_O_MUNICIPIO: string;
     CIUDAD: string;
     ESTADO: string;
-    " C.P.": string;
+    "C.P.": string;
     DIRECCION_CALLE_NUMERO: string;
     SALDO_ACTUAL: string;
     LIMITE_DE_CREDITO: string;
@@ -93,10 +93,10 @@ export const dataMapping = (data: DataExcel[]): Client[] => {
             municipality: item.DELEGACION_O_MUNICIPIO,
             city: item.CIUDAD,
             state: item.ESTADO,
-            zipCode: item[" C.P."],
+            zipCode: item["C.P."],
             address: item.DIRECCION_CALLE_NUMERO,
             currentBalance: item.SALDO_ACTUAL,
-            creditLimit: item.DIRECCION_CALLE_NUMERO,
+            creditLimit: item.LIMITE_DE_CREDITO,
             defeatedBalance: item.SALDO_VENCIDO
         }
     })

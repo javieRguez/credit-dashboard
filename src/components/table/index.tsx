@@ -6,7 +6,7 @@ const TableComponent = <T extends Record<string, any>>({
   data,
 }: TableProps<T>): JSX.Element => {
   return (
-    <Table striped className="mt-5">
+    <Table size="sm" striped className="mt-5">
       <thead>
         <tr>
           {headsWidthKeys.map((item, index) => (
