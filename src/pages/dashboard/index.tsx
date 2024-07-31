@@ -4,6 +4,7 @@ import {
   InputFileComponent,
   PaginationComponent,
   TableComponent,
+  WeatherComponent,
 } from "../../components";
 import ModalComponent from "../../components/modal";
 import { useEffect, useState } from "react";
@@ -13,6 +14,13 @@ import {
   DataExcel,
   dataMapping,
   headsWidthKeys,
+  highestCurrentBalance,
+  lowerCurrentBalance,
+  PersonBalance,
+  sumAvailableBalance,
+  sumCreditLimit,
+  sumCurrentBalance,
+  sumDefeatedBalance,
 } from "./dashboard.config";
 import {
   getPaginate,
@@ -20,6 +28,8 @@ import {
   nextPage,
   prevPage,
 } from "../../helpers/paginated";
+import CreditCharts from "./charts";
+import { numberToPrice } from "../../helpers/currency";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +39,16 @@ const Dashboard = () => {
     data: [],
     totalPages: 10,
   });
+  const [personHighestBalance, setPersonHighestBalance] =
+    useState<PersonBalance>();
+  const [personLowerBalance, setPersonLowerBalance] = useState<PersonBalance>();
 
+  useEffect(() => {
+    if (clients.length > 0) {
+      setPersonHighestBalance(highestCurrentBalance(clients));
+      setPersonLowerBalance(lowerCurrentBalance(clients));
+    }
+  }, [clients]);
   useEffect(() => {
     if (pagedData.data.length > 0) {
       createPagination(clients);
@@ -86,21 +105,62 @@ const Dashboard = () => {
       <Button color="primary" size="lg" onClick={toggleModal}>
         Cargar Data
       </Button>
-      <Row className="mt-5">
-        <Col>
-          <CardComponent title="Saldo Actual" amount={10000} />
+      <div style={{ textAlign: "end" }}>
+        <WeatherComponent />
+      </div>
+      <h3 className="mt-5">Finanzas</h3>
+      <Row>
+        <Col md="2">
+          <CardComponent
+            title="Mayor Saldo Actual"
+            subtitle={personHighestBalance?.name}
+            amount={personHighestBalance?.amount ?? 0}
+          />
         </Col>
-        <Col>
-          <CardComponent title="Saldo Actual" amount={10000} />
+        <Col md="2">
+          <CardComponent
+            title="Menor Saldo Actual"
+            subtitle={personLowerBalance?.name}
+            amount={personLowerBalance?.amount ?? 0}
+          />
         </Col>
-        <Col>
-          <CardComponent title="Saldo Actual" amount={10000} />
+        <Col md="2">
+          <CardComponent
+            title="Saldo Actual"
+            amount={sumCurrentBalance(clients)}
+          />
         </Col>
-        <Col>
-          <CardComponent title="Saldo Actual" amount={10000} />
+        <Col md="2">
+          <CardComponent
+            title="Límite de crédito"
+            amount={sumCreditLimit(clients)}
+          />
+        </Col>
+        <Col md="2">
+          <CardComponent
+            title="Saldo Vencido"
+            amount={sumDefeatedBalance(clients)}
+          />
+        </Col>
+        <Col md="2">
+          <CardComponent
+            title="Saldo Disponible"
+            amount={sumAvailableBalance(clients)}
+          />
         </Col>
       </Row>
-      <TableComponent headsWidthKeys={headsWidthKeys} data={pagedData.data} />
+      <h3 className="mt-5">Gráficas</h3>
+      <CreditCharts clients={clients} />
+      <h3 className="mt-5">Clientes</h3>
+      <TableComponent
+        headsWidthKeys={headsWidthKeys}
+        data={pagedData.data.map((client) => ({
+          ...client,
+          currentBalance: numberToPrice(parseFloat(client.currentBalance)),
+          creditLimit: numberToPrice(parseFloat(client.creditLimit)),
+          defeatedBalance: numberToPrice(parseFloat(client.defeatedBalance)),
+        }))}
+      />
       {pagedData.data.length > 0 && (
         <PaginationComponent
           page={page}
