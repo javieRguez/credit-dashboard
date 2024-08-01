@@ -5,7 +5,7 @@ import { InputFileProps } from "./inputFile.config";
 const InputFileComponent: FC<InputFileProps> = ({ handleFileUpload }) => {
   return (
     <FormGroup>
-      <Input type="file" onChange={handleFileUpload} />
+      <Input type="file" onChange={handleFileUpload} accept=".xlsx" />
     </FormGroup>
   );
 };

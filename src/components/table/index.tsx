@@ -2,14 +2,14 @@ import { Table } from "reactstrap";
 import { TableProps } from "./table.config";
 
 const TableComponent = <T extends Record<string, any>>({
-  headsWidthKeys,
+  headsWithKeys,
   data,
 }: TableProps<T>): JSX.Element => {
   return (
     <Table size="sm" striped className="mt-5">
       <thead>
         <tr>
-          {headsWidthKeys.map((item, index) => (
+          {headsWithKeys.map((item, index) => (
             <th key={index}>{item.label}</th>
           ))}
         </tr>
@@ -18,7 +18,7 @@ const TableComponent = <T extends Record<string, any>>({
         {data.map((dataElement, index) => {
           return (
             <tr key={index}>
-              {headsWidthKeys.map(({ key }, index) => (
+              {headsWithKeys.map(({ key }, index) => (
                 <td className="text-lowercase" key={index}>
                   {dataElement[key]}
                 </td>

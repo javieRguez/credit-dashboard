@@ -36,7 +36,7 @@ export interface Client {
     defeatedBalance: string;
 }
 
-export const headsWidthKeys = [
+export const headsWithKeysClients = [
     {
         key: "name",
         label: "Nombre"
@@ -171,3 +171,15 @@ export const groupedData = (clients: Client[]) => {
         return acc;
     }, {});
 }
+
+
+export const headsWithKeysExchangeRate = [
+    {
+        key: "fecha",
+        label: "Fecha"
+    },
+    {
+        key: "dato",
+        label: "Fix"
+    },
+]

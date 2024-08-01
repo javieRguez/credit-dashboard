@@ -47,47 +47,59 @@ const CreditCharts: FC<ChartProps> = ({ clients }) => {
   return (
     <Row>
       <Col md="4">
-        <div style={{ width: "300px", height: "300px" }}>
+        <div className="w-50">
           <Pie
             data={dataPie}
             options={{
               responsive: true,
-              maintainAspectRatio: false,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "top",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const value = context.raw as number;
+                      return `${context.label}: ${numberToPrice(value)}`;
+                    },
+                  },
+                },
+              },
             }}
           />
         </div>
       </Col>
 
       <Col md="8">
-        <div style={{ width: "100%", height: "300px" }}>
-          <Bar
-            data={dataBar}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    callback: function (value) {
-                      return numberToPrice(value as number);
-                    },
+        <Bar
+          data={dataBar}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return numberToPrice(value as number);
                   },
                 },
               },
-              plugins: {
-                tooltip: {
-                  callbacks: {
-                    label: function (context) {
-                      const value = context.raw as number;
-                      return `Saldo Actual: ${numberToPrice(value)}`;
-                    },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const value = context.raw as number;
+                    return `Saldo Actual: ${numberToPrice(value)}`;
                   },
                 },
               },
-            }}
-          />
-        </div>
+            },
+          }}
+        />
       </Col>
     </Row>
   );

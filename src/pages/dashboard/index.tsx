@@ -13,14 +13,7 @@ import {
   Client,
   DataExcel,
   dataMapping,
-  headsWidthKeys,
-  highestCurrentBalance,
-  lowerCurrentBalance,
-  PersonBalance,
-  sumAvailableBalance,
-  sumCreditLimit,
-  sumCurrentBalance,
-  sumDefeatedBalance,
+  headsWithKeysClients,
 } from "./dashboard.config";
 import {
   getPaginate,
@@ -30,6 +23,8 @@ import {
 } from "../../helpers/paginated";
 import CreditCharts from "./charts";
 import { numberToPrice } from "../../helpers/currency";
+import ExchangeRate from "./exchangeRate";
+import Finances from "./finances";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,18 +32,10 @@ const Dashboard = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [pagedData, setPagedData] = useState<PagedData<Client>>({
     data: [],
-    totalPages: 10,
+    totalPages: 1,
   });
-  const [personHighestBalance, setPersonHighestBalance] =
-    useState<PersonBalance>();
-  const [personLowerBalance, setPersonLowerBalance] = useState<PersonBalance>();
+  const itemsPerPage = 10;
 
-  useEffect(() => {
-    if (clients.length > 0) {
-      setPersonHighestBalance(highestCurrentBalance(clients));
-      setPersonLowerBalance(lowerCurrentBalance(clients));
-    }
-  }, [clients]);
   useEffect(() => {
     if (pagedData.data.length > 0) {
       createPagination(clients);
@@ -80,16 +67,16 @@ const Dashboard = () => {
     reader.readAsArrayBuffer(file);
   };
   const createPagination = (clients: Client[]) => {
-    const paginate = getPaginate(clients, page, 10);
+    const paginate = getPaginate(clients, page, itemsPerPage);
     setPagedData(paginate);
   };
 
   const changeToNextPage = () => {
-    const numberPagedData = nextPage(clients, page, 10);
+    const numberPagedData = nextPage(clients, page, itemsPerPage);
     setPagedData(numberPagedData);
   };
   const changeToPrevPage = () => {
-    const numberPagedData = prevPage(clients, page, 10);
+    const numberPagedData = prevPage(clients, page, itemsPerPage);
     setPagedData(numberPagedData);
   };
 
@@ -102,58 +89,31 @@ const Dashboard = () => {
       >
         <InputFileComponent handleFileUpload={handleFileUpload} />
       </ModalComponent>
+      <h6>Para iniciar la visualización de datos presione en cargar datos.</h6>
       <Button color="primary" size="lg" onClick={toggleModal}>
-        Cargar Data
+        Cargar datos
       </Button>
-      <div style={{ textAlign: "end" }}>
-        <WeatherComponent />
-      </div>
-      <h3 className="mt-5">Finanzas</h3>
-      <Row>
-        <Col md="2">
-          <CardComponent
-            title="Mayor Saldo Actual"
-            subtitle={personHighestBalance?.name}
-            amount={personHighestBalance?.amount ?? 0}
-          />
+      <Row className="mt-3">
+        <Col md="9">
+          <h3 className="mt-5">Tipo de Cambio</h3>
+
+          <ExchangeRate />
         </Col>
-        <Col md="2">
-          <CardComponent
-            title="Menor Saldo Actual"
-            subtitle={personLowerBalance?.name}
-            amount={personLowerBalance?.amount ?? 0}
-          />
-        </Col>
-        <Col md="2">
-          <CardComponent
-            title="Saldo Actual"
-            amount={sumCurrentBalance(clients)}
-          />
-        </Col>
-        <Col md="2">
-          <CardComponent
-            title="Límite de crédito"
-            amount={sumCreditLimit(clients)}
-          />
-        </Col>
-        <Col md="2">
-          <CardComponent
-            title="Saldo Vencido"
-            amount={sumDefeatedBalance(clients)}
-          />
-        </Col>
-        <Col md="2">
-          <CardComponent
-            title="Saldo Disponible"
-            amount={sumAvailableBalance(clients)}
-          />
+        <Col md="3">
+          <div className="position-relative">
+            <h5>Clima</h5>
+            <WeatherComponent />
+          </div>
         </Col>
       </Row>
+
+      <h3 className="mt-5">Finanzas</h3>
+      <Finances clients={clients} />
       <h3 className="mt-5">Gráficas</h3>
       <CreditCharts clients={clients} />
       <h3 className="mt-5">Clientes</h3>
       <TableComponent
-        headsWidthKeys={headsWidthKeys}
+        headsWithKeys={headsWithKeysClients}
         data={pagedData.data.map((client) => ({
           ...client,
           currentBalance: numberToPrice(parseFloat(client.currentBalance)),

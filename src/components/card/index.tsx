@@ -6,12 +6,7 @@ import { numberToPrice } from "../../helpers/currency";
 const CardComponent: FC<CardProps> = ({ title, subtitle, amount }) => {
   const amountCurrency = numberToPrice(amount);
   return (
-    <Card
-      style={{
-        width: "18rem",
-        height: "110px",
-      }}
-    >
+    <Card className="w-100 h-100">
       <CardBody>
         <CardTitle tag="h6">{title}</CardTitle>
         <CardSubtitle tag="span">{subtitle}</CardSubtitle>

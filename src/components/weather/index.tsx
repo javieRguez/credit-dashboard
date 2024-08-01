@@ -4,8 +4,8 @@ const Weather = () => {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const apiKey = import.meta.env.VITE_APP_API_KEY;
-  const city = import.meta.env.VITE_APP_CITY;
+  const apiKey = import.meta.env.VITE_APP_API_KEY_WEATHER;
+  const city = import.meta.env.VITE_APP_CITY_WEATHER;
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
   useEffect(() => {
@@ -34,7 +34,6 @@ const Weather = () => {
 
   return (
     <>
-      <h4>Clima</h4>
       <div>
         La temperatura en {city} es {weatherData.main.temp}°C
       </div>

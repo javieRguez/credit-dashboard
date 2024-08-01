@@ -12,7 +12,7 @@ export const getPaginate = <T>(data: T[], page: number, itemsPerPage: number): P
         data: paginatedData,
         totalPages: totalPages
     };
-}
+};
 
 export const nextPage = <T>(data: T[], currentPage: number, itemsPerPage: number): PagedData<T> => {
     const totalPages = Math.ceil(data.length / itemsPerPage);

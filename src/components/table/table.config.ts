@@ -4,6 +4,6 @@ interface Item {
     label: string;
 }
 export interface TableProps<T> {
-    headsWidthKeys: Item[];
+    headsWithKeys: Item[];
     data: T[];
 }
