@@ -18,7 +18,6 @@ interface ExchangeRate {
 
 const ExchangeRate: FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const [exchangeRates, setExchangeRates] = useState<any>(null);
   const [exchangeRate, setExchangeRate] = useState<ExchangeRate>({
     startDate: "",
     endDate: "",

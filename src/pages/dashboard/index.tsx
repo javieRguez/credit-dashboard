@@ -1,6 +1,5 @@
 import { Col, Row, Button } from "reactstrap";
 import {
-  CardComponent,
   InputFileComponent,
   PaginationComponent,
   TableComponent,
