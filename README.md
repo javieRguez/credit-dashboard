@@ -1,30 +1,34 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es un proyecto base configurado con React, TypeScript y Vite.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Asegúrate de tener instaladas las siguientes herramientas en tu máquina:
 
-## Expanding the ESLint configuration
+- Node.js (versión 14 o superior)
+- npm (versión 6 o superior) o Yarn (opcional)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Instalación
 
-- Configure the top-level `parserOptions` property like this:
+1. Clona el repositorio:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+   ```bash
+   git clone https://github.com/javieRguez/credit-dashboard.git
+   cd credit-dashboard
+    ```
+2. **Instalar las dependencias:**
+   `bash
+    npm install
+    `
+3.**Configurar el archivo `.env`:**
+
+Crea un `.env` en la raíz y copia del archivo `.env.example` a `.env` y configura las variables de entorno.
+
+## Ejecutar la aplicación
+
+para levantar la aplicación en un el ambiente de desarrollo con el siguiente comando:
+
+```bash
+npm run dev
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
